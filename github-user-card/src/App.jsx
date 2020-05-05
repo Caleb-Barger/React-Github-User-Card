@@ -28,15 +28,33 @@ class App extends React.Component {
         this.setState({userInfo: res.data})
       })
       .catch(err => {
-        console.log(err)
+        console.log("Something went wrong defaulting to prev user...")
+        this.setState({url: prevState.url})
       })
     }
   }
 
+  updateSearchText = textBoxValue => {
+    this.setState({
+      searchText: textBoxValue
+    })
+  }
+
+  findUser = () => {
+    this.setState({
+      url: `https://api.github.com/users/${this.state.searchText}`,
+      searchText: ""
+    })
+  }
+
   render(){
     return(
-      <div>
-        <UserSearchBar />
+      <div className="wrapper">
+        <UserSearchBar 
+          searchText={this.state.searchText} 
+          updateSearchText={this.updateSearchText}
+          findUser={this.findUser}
+        />
         <GithubUserCard userInfo={this.state.userInfo}/>
       </div>
       
